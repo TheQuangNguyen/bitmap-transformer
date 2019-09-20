@@ -57,11 +57,11 @@ public class App {
                         bitmap.rotate90degrees(Integer.parseInt(param));
                         bitmap.writeToFile(outputFilePath);
                         break;
-                    case "reverseHorizontally":
+                    case "flipHorizontally":
                         bitmap.reverseHorizontally();
                         bitmap.writeToFile(outputFilePath);
                         break;
-                    case "reverseVertically":
+                    case "flipVertically":
                         bitmap.reverseVertically();
                         bitmap.writeToFile(outputFilePath);
                         break;
