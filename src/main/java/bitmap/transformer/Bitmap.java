@@ -9,21 +9,25 @@ import static javax.imageio.ImageIO.*;
 
 public class Bitmap {
 
-    BufferedImage image;
+    private File file;
+    private BufferedImage image;
 
     public Bitmap(File file) throws IOException {
-        this.image = read(file);
+        this.file = file;
+        this.image = ImageIO.read(file);
+    }
+
+    public void writeToFile(String filePath) throws IOException {
+        ImageIO.write(image, "bmp", new File(filePath));
     }
 
     // Transform the input bmp file to ones with random colors for every pixels
     public void randomize() throws IOException {
-        for (int i = 0; i < image.getHeight(); i++) {
-            for (int j = 0; j < image.getWidth(); j++) {
+        for (int i = 0; i < image.getWidth(); i++) {
+            for (int j = 0; j < image.getHeight(); j++) {
                 image.setRGB(i,j,randomRGBValue());
             }
         }
-
-        ImageIO.write(image, "bmp", new File("src/main/resources/randomized.bmp"));
     }
 
     private int randomRGBValue() {
@@ -38,8 +42,6 @@ public class Bitmap {
                 image.setRGB(i,j,invertRGBValue(currentRGB));
             }
         }
-
-        ImageIO.write(image, "bmp", new File("src/main/resources/invert.bmp"));
     }
     private int invertRGBValue(int currentRGBValue) {
         return 16_777_215 - currentRGBValue;
@@ -49,14 +51,12 @@ public class Bitmap {
     // https://www.tutorialspoint.com/dip/grayscale_to_rgb_conversion.htm
     // I use this resource to figure out the conversion of RGB to grayscale
     public void grayscale() throws IOException {
-        for (int i = 0; i < image.getHeight(); i++) {
-            for (int j = 0; j < image.getWidth(); j++) {
+        for (int i = 0; i < image.getWidth(); i++) {
+            for (int j = 0; j < image.getHeight(); j++) {
                 int currentRGB = image.getRGB(i,j);
                 image.setRGB(i,j,grayscaleRGBValue(currentRGB));
             }
         }
-
-        ImageIO.write(image, "bmp", new File("src/main/resources/grayscale.bmp"));
     }
 
     // https://stackoverflow.com/questions/4801366/convert-rgb-values-to-integer
@@ -76,14 +76,12 @@ public class Bitmap {
     // input positive number for lighten the image, negative number for darken the image
 
     public void changeBrightness(int percentage) throws IOException {
-        for (int i = 0; i < image.getHeight(); i++) {
-            for (int j = 0; j < image.getWidth(); j++) {
+        for (int i = 0; i < image.getWidth(); i++) {
+            for (int j = 0; j < image.getHeight(); j++) {
                 int currentRGB = image.getRGB(i,j);
                 image.setRGB(i,j,changeBrightnessRGBValue(currentRGB, percentage));
             }
         }
-
-        ImageIO.write(image, "bmp", new File("src/main/resources/brightness.bmp"));
     }
 
     public int changeBrightnessRGBValue(int currentRGBValue, int percentage) {
@@ -113,5 +111,33 @@ public class Bitmap {
         } else {
             return (int)RGB;
         }
+    }
+
+
+    // Rotate the image 90 degrees clockwise or counterclockwise
+    // input i should be either positive or negative for clockwise or counterclockwise.
+    // Input i is multiple of 90 degree so if i = 3, rotate 270 degrees clockwise
+    public void rotate90degrees(int clockWiseOrCounterClockwise) throws IOException {
+        BufferedImage imageCopy = ImageIO.read(file);
+        int width = imageCopy.getWidth()-1;
+        int height = imageCopy.getHeight()-1;
+        if (clockWiseOrCounterClockwise > 0) {
+            for (int i = 0; i <= width; i++) {
+                for (int j = 0; j <= height; j++) {
+                    int currentRGB = imageCopy.getRGB(i, j);
+                    image.setRGB(height - j, width - i, currentRGB);
+                }
+            }
+        } else if (clockWiseOrCounterClockwise < 0) {
+            for (int i = 0; i <= width; i++) {
+                for (int j = 0; j <= height; j++) {
+                    int currentRGB = imageCopy.getRGB(i, j);
+                    image.setRGB(j, height - i, currentRGB);
+                }
+            }
+        } else {
+            System.out.println("Enter 1 or -1 for clockwise or counterclockwise");
+        }
+
     }
 }

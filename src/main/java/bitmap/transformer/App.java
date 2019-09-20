@@ -33,12 +33,17 @@ public class App {
 //        String transformName = args[2];
 
         try {
-            File mario = new File("src/main/resources/mario.bmp");
-            Bitmap bitmap = new Bitmap(mario);
-//            bitmap.randomize();
-//            bitmap.invert();
-//            bitmap.grayscale();
-            bitmap.changeBrightness(70);
+            File marioFile = new File("src/main/resources/mario.bmp");
+            Bitmap mario = new Bitmap(marioFile);
+
+//            mario.randomize();
+//            mario.invert();
+//            mario.grayscale();
+//            mario.changeBrightness(70);
+
+            mario.rotate90degrees(1);
+            mario.writeToFile("src/main/resources/rotate.bmp");
+
         } catch (IOException e) {
             System.out.println(".bmp file is not found");
         }
