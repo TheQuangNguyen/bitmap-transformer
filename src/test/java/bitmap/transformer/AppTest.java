@@ -5,10 +5,16 @@ package bitmap.transformer;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import bitmap.transformer.Bitmap.*;
+
+import java.io.File;
+import java.io.IOException;
 
 public class AppTest {
-    @Test public void testAppHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull("app should have a greeting", classUnderTest.getGreeting());
+    String pathToFile = "src/main/resources/mario.bmp";
+    @Test
+    public void testRandomize() throws IOException {
+        File file = new File(pathToFile);
+        Bitmap bitmap = new Bitmap(file);
     }
 }
