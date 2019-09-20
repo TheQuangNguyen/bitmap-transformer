@@ -37,7 +37,8 @@ public class App {
             Bitmap bitmap = new Bitmap(mario);
 //            bitmap.randomize();
 //            bitmap.invert();
-            bitmap.grayscale();
+//            bitmap.grayscale();
+            bitmap.changeBrightness(70);
         } catch (IOException e) {
             System.out.println(".bmp file is not found");
         }

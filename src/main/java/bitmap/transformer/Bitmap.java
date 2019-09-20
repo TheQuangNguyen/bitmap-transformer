@@ -62,9 +62,56 @@ public class Bitmap {
     // https://stackoverflow.com/questions/4801366/convert-rgb-values-to-integer
     // I use this resource to get formula to convert single rgb integer to each red, blue, and green values.
     private int grayscaleRGBValue(int currentRGBValue) {
+
+        // Convert single rgb value to separate values for red, green, and blue;
         int red = (int) ((Math.pow(256,3) + currentRGBValue) / 65536);
         int green = (int) (((Math.pow(256,3) + currentRGBValue) / 256 ) % 256 );
         int blue = (int) ((Math.pow(256,3) + currentRGBValue) % 256);
-        return (int)((0.3 * red) + (0.59 * green) + (0.11 * blue));
+
+        int grayscale = (int)( (0.3 * red) + (0.59 * green) + (0.11 * blue) );
+        return 65536 * grayscale + 256 * grayscale + grayscale;
+    }
+
+    // Lighten and Darken an image
+    // input positive number for lighten the image, negative number for darken the image
+
+    public void changeBrightness(int percentage) throws IOException {
+        for (int i = 0; i < image.getHeight(); i++) {
+            for (int j = 0; j < image.getWidth(); j++) {
+                int currentRGB = image.getRGB(i,j);
+                image.setRGB(i,j,changeBrightnessRGBValue(currentRGB, percentage));
+            }
+        }
+
+        ImageIO.write(image, "bmp", new File("src/main/resources/brightness.bmp"));
+    }
+
+    public int changeBrightnessRGBValue(int currentRGBValue, int percentage) {
+
+        // Convert single rgb value to separate values for red, green, and blue;
+        double red =  ((Math.pow(256,3) + currentRGBValue) / 65536);
+        double green = (((Math.pow(256,3) + currentRGBValue) / 256 ) % 256 );
+        double blue = ((Math.pow(256,3) + currentRGBValue) % 256);
+
+        // Change RGB values accordingly to brighten/darken image
+        red = red + red*((double)percentage / 100d);
+        blue = blue + blue*((double)percentage / 100d);
+        green = green + green*((double)percentage / 100d);
+
+        red = checkingForCappedRGB(red);
+        blue = checkingForCappedRGB(blue);
+        green = checkingForCappedRGB(green);
+
+        return (int)(65536 * red + 256 * green + blue);
+    }
+
+    private int checkingForCappedRGB(double RGB) {
+        if (RGB > 255) {
+            return 255;
+        } else if (RGB < 0) {
+            return 0;
+        } else {
+            return (int)RGB;
+        }
     }
 }
