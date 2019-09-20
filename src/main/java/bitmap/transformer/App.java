@@ -3,12 +3,9 @@
  */
 package bitmap.transformer;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
+import bitmap.transformer.Bitmap.*;
 
 // Color Pallet Transforms
 //Invert
@@ -27,26 +24,52 @@ import java.util.Scanner;
 //Vertically or Horizontally Stretch
 
 public class App {
+
     public static void main(String[] args) {
-//        String inputFilePath = args[0];
-//        String outputFilePath = args[1];
-//        String transformName = args[2];
-
         try {
-            File marioFile = new File("src/main/resources/mario.bmp");
-            Bitmap mario = new Bitmap(marioFile);
+            if (args.length >= 3) {
+                String inputFilePath = args[0];
+                String outputFilePath = args[1];
+                String transformName = args[2];
+                String param = args[3];
 
-//            mario.randomize();
-//            mario.invert();
-//            mario.grayscale();
-//            mario.changeBrightness(70);
+                File file = new File(inputFilePath);
+                Bitmap bitmap = new Bitmap(file);
 
-            mario.rotate90degrees(1);
-            mario.writeToFile("src/main/resources/rotate.bmp");
-
+                switch(transformName) {
+                    case "randomize":
+                        bitmap.randomize();
+                        bitmap.writeToFile(outputFilePath);
+                        break;
+                    case "invert":
+                        bitmap.invert();
+                        bitmap.writeToFile(outputFilePath);
+                        break;
+                    case "grayscale":
+                        bitmap.grayscale();
+                        bitmap.writeToFile(outputFilePath);
+                        break;
+                    case "changeBrightness":
+                        bitmap.changeBrightness(Integer.parseInt(param));
+                        bitmap.writeToFile(outputFilePath);
+                        break;
+                    case "rotate":
+                        bitmap.rotate90degrees(Integer.parseInt(param));
+                        bitmap.writeToFile(outputFilePath);
+                        break;
+                    case "reverseHorizontally":
+                        bitmap.reverseHorizontally();
+                        bitmap.writeToFile(outputFilePath);
+                        break;
+                    case "reverseVertically":
+                        bitmap.reverseVertically();
+                        bitmap.writeToFile(outputFilePath);
+                        break;
+                }
+            }
         } catch (IOException e) {
             System.out.println(".bmp file is not found");
         }
-
+        System.out.println("Transform completed successfully");
     }
 }

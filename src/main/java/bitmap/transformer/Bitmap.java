@@ -11,10 +11,14 @@ public class Bitmap {
 
     private File file;
     private BufferedImage image;
+    private int height;
+    private int width;
 
     public Bitmap(File file) throws IOException {
         this.file = file;
         this.image = ImageIO.read(file);
+        this.height = this.image.getHeight();
+        this.width = this.image.getWidth();
     }
 
     public void writeToFile(String filePath) throws IOException {
@@ -23,8 +27,8 @@ public class Bitmap {
 
     // Transform the input bmp file to ones with random colors for every pixels
     public void randomize() throws IOException {
-        for (int i = 0; i < image.getWidth(); i++) {
-            for (int j = 0; j < image.getHeight(); j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 image.setRGB(i,j,randomRGBValue());
             }
         }
@@ -36,8 +40,8 @@ public class Bitmap {
 
     // Transform the input bmp file by inverting the color for each pixel
     public void invert() throws IOException {
-        for (int i = 0; i < image.getHeight(); i++) {
-            for (int j = 0; j < image.getWidth(); j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 int currentRGB = image.getRGB(i,j);
                 image.setRGB(i,j,invertRGBValue(currentRGB));
             }
@@ -51,8 +55,8 @@ public class Bitmap {
     // https://www.tutorialspoint.com/dip/grayscale_to_rgb_conversion.htm
     // I use this resource to figure out the conversion of RGB to grayscale
     public void grayscale() throws IOException {
-        for (int i = 0; i < image.getWidth(); i++) {
-            for (int j = 0; j < image.getHeight(); j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 int currentRGB = image.getRGB(i,j);
                 image.setRGB(i,j,grayscaleRGBValue(currentRGB));
             }
@@ -76,15 +80,15 @@ public class Bitmap {
     // input positive number for lighten the image, negative number for darken the image
 
     public void changeBrightness(int percentage) throws IOException {
-        for (int i = 0; i < image.getWidth(); i++) {
-            for (int j = 0; j < image.getHeight(); j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 int currentRGB = image.getRGB(i,j);
                 image.setRGB(i,j,changeBrightnessRGBValue(currentRGB, percentage));
             }
         }
     }
 
-    public int changeBrightnessRGBValue(int currentRGBValue, int percentage) {
+    private int changeBrightnessRGBValue(int currentRGBValue, int percentage) {
 
         // Convert single rgb value to separate values for red, green, and blue;
         double red =  ((Math.pow(256,3) + currentRGBValue) / 65536);
@@ -136,8 +140,29 @@ public class Bitmap {
                 }
             }
         } else {
-            System.out.println("Enter 1 or -1 for clockwise or counterclockwise");
+            System.out.println("Enter positive or negative for clockwise or counterclockwise");
         }
+    }
 
+    // reverse an image vertically
+    public void reverseVertically() {
+        for (int i = 0; i < width; i++){
+            for (int j = 0; j < height/2; j++){
+                int temp = image.getRGB(i,j);
+                image.setRGB(i,j,image.getRGB(i,height - j - 1));
+                image.setRGB(i,height -j -1, temp);
+            }
+        }
+    }
+
+    // reverse an image horizontally
+    public void reverseHorizontally() {
+        for (int i = 0; i < height/2; i++){
+            for (int j = 0; j < width; j++){
+                int temp = image.getRGB(i,j);
+                image.setRGB(i,j,image.getRGB(width - i - 1,j));
+                image.setRGB(width - i - 1,j, temp);
+            }
+        }
     }
 }
