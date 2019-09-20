@@ -35,7 +35,9 @@ public class App {
         try {
             File mario = new File("src/main/resources/mario.bmp");
             Bitmap bitmap = new Bitmap(mario);
-            bitmap.randomize();
+//            bitmap.randomize();
+//            bitmap.invert();
+            bitmap.grayscale();
         } catch (IOException e) {
             System.out.println(".bmp file is not found");
         }
