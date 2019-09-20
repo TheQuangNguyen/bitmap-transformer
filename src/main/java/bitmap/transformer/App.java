@@ -3,24 +3,40 @@
  */
 package bitmap.transformer;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
+
+// Color Pallet Transforms
+//Invert
+//Randomize
+//Black and White
+//Darken or Lighten
+//Add or Multiply a Hue
+//Add or Subtract Contrast
+
+//Raster Data Transforms
+//Pixilate
+//Add a border
+//Add a watermark
+//Rotate
+//Vertically or Horizontally Mirror
+//Vertically or Horizontally Stretch
 
 public class App {
     public static void main(String[] args) {
-        String inputFilePath = args[0];
-        String outputFilePath = args[1];
-        String transformName = args[2];
-        
+//        String inputFilePath = args[0];
+//        String outputFilePath = args[1];
+//        String transformName = args[2];
+
         try {
             File mario = new File("src/main/resources/mario.bmp");
-            Scanner reader = new Scanner(mario);
-
-            while (reader.hasNextLine()) {
-                System.out.println(reader.nextLine());
-            }
-        } catch (FileNotFoundException e) {
+            Bitmap bitmap = new Bitmap(mario);
+            bitmap.randomize();
+        } catch (IOException e) {
             System.out.println(".bmp file is not found");
         }
 
